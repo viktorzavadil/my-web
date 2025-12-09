@@ -1,0 +1,39 @@
+---
+const currentPath = Astro.url.pathname;
+---
+
+<header class="navbar bg-base-100/90 backdrop-blur-md sticky top-0 z-50 border-b border-base-content/5">
+  <div class="container mx-auto px-4">
+    <div class="flex-1">
+      <a href="/" class="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent hover:opacity-80 transition-opacity">
+        VZ
+      </a>
+    </div>
+    <nav class="flex items-center gap-1">
+      <a
+        href="/"
+        class:list={[
+          'btn btn-ghost btn-sm',
+          currentPath === '/' && 'text-primary'
+        ]}
+      >
+        Domů
+      </a>
+      <a
+        href="/blog"
+        class:list={[
+          'btn btn-ghost btn-sm',
+          currentPath.startsWith('/blog') && 'text-primary'
+        ]}
+      >
+        Blog
+      </a>
+      <a
+        href="mailto:zavadil.viktor@seznam.cz"
+        class="btn btn-primary btn-sm ml-2"
+      >
+        Kontakt
+      </a>
+    </nav>
+  </div>
+</header>

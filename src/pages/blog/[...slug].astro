@@ -1,0 +1,76 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+function formatDate(date: Date): string {
+  return date.toLocaleDateString('cs-CZ', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+}
+---
+
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <article class="py-16 px-4">
+    <div class="container mx-auto max-w-3xl">
+      <header class="mb-12 text-center">
+        <div class="flex flex-wrap justify-center gap-2 mb-6">
+          {post.data.tags.map((tag) => (
+            <span class="badge bg-primary/10 text-primary border-0">{tag}</span>
+          ))}
+        </div>
+        <h1 class="text-3xl md:text-5xl font-bold mb-6 leading-tight">
+          {post.data.title}
+        </h1>
+        <p class="text-xl text-base-content/60 mb-6">
+          {post.data.description}
+        </p>
+        <div class="flex items-center justify-center gap-4 text-sm text-base-content/50">
+          <time>
+            {formatDate(post.data.pubDate)}
+          </time>
+          {post.data.updatedDate && (
+            <>
+              <span class="w-1 h-1 rounded-full bg-base-content/30"></span>
+              <span>Aktualizováno {formatDate(post.data.updatedDate)}</span>
+            </>
+          )}
+        </div>
+      </header>
+
+      <div class="prose prose-lg max-w-none
+        prose-headings:text-base-content prose-headings:font-bold
+        prose-p:text-base-content/80 prose-p:leading-relaxed
+        prose-a:text-primary prose-a:no-underline hover:prose-a:underline
+        prose-strong:text-base-content
+        prose-code:text-primary prose-code:bg-base-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
+        prose-pre:bg-base-100 prose-pre:border prose-pre:border-base-content/10
+        prose-blockquote:border-primary prose-blockquote:bg-base-100 prose-blockquote:py-1 prose-blockquote:px-6 prose-blockquote:rounded-r-lg
+        prose-li:text-base-content/80
+        prose-img:rounded-xl prose-img:border prose-img:border-base-content/10">
+        <Content />
+      </div>
+
+      <footer class="mt-16 pt-8 border-t border-base-content/10">
+        <a href="/blog" class="btn btn-ghost group">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+          </svg>
+          Zpět na blog
+        </a>
+      </footer>
+    </div>
+  </article>
+</BaseLayout>

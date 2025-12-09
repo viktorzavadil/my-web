@@ -1,0 +1,35 @@
+---
+title: "Stavím vlastní Home Assistant server"
+description: "Dávám dohromady vlastní chytrou domácnost. Lokální server bez cloudu (zatím)."
+pubDate: 2024-12-09
+tags: ["home-assistant", "iot", "node-red", "zigbee", "influxdb", "grafana", "zigbee2mqtt"]
+---
+
+## Stack
+
+- **Zigbee2MQTT** + **Sonoff Zigbee 3.0 USB Dongle Plus** – komunikace se senzory
+- **Mosquitto** – MQTT broker
+- **Node-RED** – prototypování automatizací
+- **InfluxDB** – time-series databáze pro historická data
+- **Grafana** – vizualizace a dashboardy
+
+Vše běží v dockeru. Zatím řeším logiku v Node-RED, protože se mi v něm rychle prototypuje, ale časem by si to zasloužilo
+vlastní server (třeba v **go**).
+
+## Čidla
+
+Senzory vybírám podle [podporovaných zařízení na Zigbee2MQTT](https://www.zigbee2mqtt.io/supported-devices/). Díky tomu je integrace bezproblémová – je zde uveden i nějaký troubleshooting.
+
+Zatím jsem objednal na otestování následující zařízení:
+- **Sonoff SNZB-02D** – teplota a vlhkost
+- **Sonoff SNZB-03** – pohybový senzor
+- **Third Reality 3RMS16BZ** – pohybový senzor
+- **IKEA STYRBAR** – ovladač (ten už jsem měl doma ke kuchyni 😀)
+
+Všechny zařízení se povedlo naintegrovat bez potíží.
+
+## Cíle
+- Jednoduchý **bezpečnostní systém**: pohybová čidla budou detekovat pohyb.
+- Monitoring **teploty**, **vlhkosti** a dopočítávání **rosného bodu** kvůli prevenci plísní.
+- Zautomatizování ovládání světel (třeba těch vánočních 🎄).
+- Integrace vlastních **ESP32** aplikací.
